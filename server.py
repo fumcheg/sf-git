@@ -25,7 +25,7 @@ class ProxyScanner(BaseModel):
 def scan(proxyScanner: ProxyScanner, response_class=PlainTextResponse):
     try:
         ipList = scanner_validate_input(proxyScanner.target, proxyScanner.count)
-        with concurrent.futures.ThreadPoolExecutor() as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
             results = executor.map(scanner_run, ipList)
             results = "\n".join(results)
         return f"{'-' * 100}\n{results}{'-' * 100}\n"
